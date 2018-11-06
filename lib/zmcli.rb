@@ -14,7 +14,8 @@ module Zmcli
         gaa = stdout.read
         accounts = gaa.split("\n")
         accounts.each do |a|
-          puts "zmprov rim #{a} start >/dev/null"
+          #puts "zmprov rim #{a} start >/dev/null"
+          puts "zmprov rim #{a} start"
         end
       end
     end
