@@ -15,7 +15,7 @@ module Zmcli
         accounts = gaa.split("\n")
         accounts.each do |a|
           #puts "zmprov rim #{a} start >/dev/null"
-          puts "zmprov rim #{a} start"
+          system("zmprov rim #{a} start")
         end
       end
     end
