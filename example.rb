@@ -2,5 +2,4 @@
 
 require_relative "lib/zmcli"
 
-Zmcli::Reindex
-Zmcli::Backup
+Zmcli::Main

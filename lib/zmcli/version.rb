@@ -1,3 +1,3 @@
 module Zmcli
-  VERSION = "0.1.4.1"
+  VERSION = "0.1.4.3"
 end

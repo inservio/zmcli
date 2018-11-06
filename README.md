@@ -11,3 +11,9 @@ zmcli.rb --reindex=all
 ````
 zmcli.rb --reindex=email@domain.tld
 ````
+
+**Backup an account**
+
+````
+zmcli.rb --backup-last-month-account=email@domain.tld
+````

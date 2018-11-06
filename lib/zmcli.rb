@@ -2,10 +2,9 @@
 require 'optparse'
 require 'open3'
 require 'date'
-require 'shellwords'
 
 module Zmcli
-  class Reindex
+  class Main
     options = {}
 
     opt_parser = OptionParser.new do |opt|
@@ -14,8 +13,11 @@ module Zmcli
       opt.on '--reindex ACCOUNT', 'Reindex accounts' do |arg|
         options[:reindex] = arg
       end
-
+      opt.on '--backup-last-month-account ACCOUNT', 'Backup account for period of last month' do |arg|
+        options[:blma] = arg
+      end
     end
+
     opt_parser.parse!
 
     if options[:reindex] == "all"
@@ -33,20 +35,6 @@ module Zmcli
       system "/opt/zimbra/bin/zmprov rim #{options[:reindex]} start"
       puts "Finished Reindexing of #{options[:reindex]}"
     end
-  end
-
-  class Backup
-    options = {}
-
-    opt_parser = OptionParser.new do |opt|
-      opt.banner = "Usage: COMMAND [OPTIONS]"
-
-      opt.on '--backup-last-month-account ACCOUNT', 'Backup account for period of last month' do |arg|
-        options[:blma] = arg
-      end
-
-    end
-    opt_parser.parse!
 
     if options[:blma]
       LastMonth = Time.now.to_date.prev_month.strftime '%m/%d/%Y'
@@ -56,6 +44,6 @@ module Zmcli
     else
       puts   "Account to backup not specified."
     end
-  end
 
+  end
 end
