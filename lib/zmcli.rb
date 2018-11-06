@@ -10,8 +10,7 @@ module Zmcli
       opt.banner = "Usage: COMMAND [OPTIONS]"
       opt.on '--reindex all', 'Reindex all accounts' do |arg|
         accounts = []
-        #gaa = system("/opt/zimbra/bin/zmprov -l gaa")
-        stdin, stdout, stderr = Open3.popen3("ps")
+        stdin, stdout, stderr = Open3.popen3("/opt/zimbra/bin/zmprov -l gaa")
         gaa = stdout.read
         accounts = gaa.split("\n")
         accounts.each do |a|
