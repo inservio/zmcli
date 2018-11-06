@@ -27,9 +27,9 @@ module Zmcli
         puts "Finished Reindexing of #{a}"
       end
     else
-      puts   "Reindexing #{arg}"
-      system "/opt/zimbra/bin/zmprov rim #{arg} start"
-      puts "Finished Reindexing of #{arg}"
+      puts   "Reindexing #{options[:reindex]}"
+      system "/opt/zimbra/bin/zmprov rim #{options[:reindex]} start"
+      puts "Finished Reindexing of #{options[:reindex]}"
     end
   end
 end
