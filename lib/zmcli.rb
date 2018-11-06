@@ -31,9 +31,11 @@ module Zmcli
         puts "Finished Reindexing of #{a}"
       end
     else
-      puts   "Reindexing #{options[:reindex]}"
-      system "/opt/zimbra/bin/zmprov rim #{options[:reindex]} start"
-      puts "Finished Reindexing of #{options[:reindex]}"
+      if options[:reindex]
+        puts   "Reindexing #{options[:reindex]}"
+        system "/opt/zimbra/bin/zmprov rim #{options[:reindex]} start"
+        puts "Finished Reindexing of #{options[:reindex]}"
+      end
     end
 
     if options[:blma]
@@ -41,8 +43,6 @@ module Zmcli
       puts "Backing up #{options[:blma]}"
       AfterString = '"' + "//?fmt=tgz&query=after:#{LastMonth}" + '"'
       system("/opt/zimbra/bin/zmmailbox -z -m #{options[:blma]} getRestURL #{AfterString} > #{options[:blma]}.tar.gz")
-    else
-      puts   "Account to backup not specified."
     end
 
   end
