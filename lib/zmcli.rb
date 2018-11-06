@@ -26,7 +26,6 @@ module Zmcli
         system "/opt/zimbra/bin/zmprov rim #{arg} start"
         puts   "Finished Reindexing of #{arg}"
       end
-    end
 
   end
   opt_parser.parse!
