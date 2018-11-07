@@ -19,6 +19,9 @@ module Zmcli
       opt.on '--backup-account ACCOUNT', 'Backup account for period of last month' do |arg|
         options[:backup_account] = arg
       end
+      opt.on '--backup-accounts-for-domain DOMAIN', 'Backup account for period of last month' do |arg|
+        options[:bafd] = arg
+      end
       opt.on '--make-admin ACCOUNT, DOMAIN', 'Backup account for period of last month' do |arg|
         options[:makeadmin_account] = arg[0]
         options[:makeadmin_domain] = arg[0]
@@ -54,8 +57,20 @@ module Zmcli
 
     if options[:backup_account]
       puts "Backing up #{options[:backup_account]}"
-      AfterString = '"' + "/?fmt=tgz&resolve=skip" + '"'
+      AfterString = '"' + "/?fmt=tgz" + '"'
       system("/opt/zimbra/bin/zmmailbox -z -m #{options[:backup_account]} getRestURL #{AfterString} > #{options[:backup_account]}.tar.gz")
+    end
+
+    if options[:bafd]
+      accounts = []
+      stdin, stdout, stderr = Open3.popen3("/opt/zimbra/bin/zmprov -l gaa #{options[:bafd]}")
+      gaa = stdout.read
+      accounts = gaa.split("\n")
+      accounts.each do |a|
+        puts "Backing up account #{a}"
+        AfterString = '"' + "/?fmt=tgz" + '"'
+        system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{AfterString} > #{a}.tar.gz")
+      end
     end
 
     if options[:makeadmin_account] && options[:makeadmin_domain]
