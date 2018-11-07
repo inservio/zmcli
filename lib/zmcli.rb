@@ -16,6 +16,9 @@ module Zmcli
       opt.on '--backup-last-month-account ACCOUNT', 'Backup account for period of last month' do |arg|
         options[:blma] = arg
       end
+      opt.on '--backup-account ACCOUNT', 'Backup account for period of last month' do |arg|
+        options[:backup_account] = arg
+      end
       opt.on '--make-admin ACCOUNT, DOMAIN', 'Backup account for period of last month' do |arg|
         options[:makeadmin_account] = arg[0]
         options[:makeadmin_domain] = arg[0]
@@ -47,6 +50,12 @@ module Zmcli
       puts "Backing up #{options[:blma]}"
       AfterString = '"' + "//?fmt=tgz&query=after:#{LastMonth}" + '"'
       system("/opt/zimbra/bin/zmmailbox -z -m #{options[:blma]} getRestURL #{AfterString} > #{options[:blma]}.tar.gz")
+    end
+
+    if options[:backup_account]
+      puts "Backing up #{options[:backup_account]}"
+      AfterString = '"' + "/?fmt=tgz&resolve=skip" + '"'
+      system("/opt/zimbra/bin/zmmailbox -z -m #{options[:backup_account]} getRestURL #{AfterString} > #{options[:backup_account]}.tar.gz")
     end
 
     if options[:makeadmin_account] && options[:makeadmin_domain]
