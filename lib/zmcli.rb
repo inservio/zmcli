@@ -82,7 +82,11 @@ module Zmcli
       current_mail_quota = stdout.read
       new_mail_quota = current_mail_quota.to_i + 100000000
       puts "Increasing mail quota for account #{options[:imqfa]}"
+      puts "Current mail quota is:"
+      system("zmprov ga #{options[:imqfa]} zimbraMailQuota")
       system("/opt/zimbra/bin/zmprov ma #{options[:imqfa]} zimbraMailQuota #{new_mail_quota.to_i}")
+      puts "New mail quota is:"
+      system("zmprov ga #{options[:imqfa]} zimbraMailQuota")
     end
 
     if options[:makeadmin_account] && options[:makeadmin_domain]
