@@ -63,12 +63,12 @@ module Zmcli
 
     if options[:bafd]
       accounts = []
+      BAFDAfterString = '"' + "/?fmt=tgz" + '"'
       stdin, stdout, stderr = Open3.popen3("/opt/zimbra/bin/zmprov -l gaa #{options[:bafd]}")
       gaa = stdout.read
       accounts = gaa.split("\n")
       accounts.each do |a|
         puts "Backing up account #{a}"
-        BAFDAfterString = '"' + "/?fmt=tgz" + '"'
         system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{BAFDAfterString} > #{a}.tar.gz")
       end
     end
