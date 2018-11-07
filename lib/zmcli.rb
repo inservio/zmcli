@@ -22,6 +22,9 @@ module Zmcli
       opt.on '--backup-accounts-for-domain DOMAIN', 'Backup account for period of last month' do |arg|
         options[:bafd] = arg
       end
+      opt.on '--increase-mail-quota-for-account Account', 'Increase mail quota for account' do |arg|
+        options[:imqfa] = arg
+      end
       opt.on '--make-admin ACCOUNT, DOMAIN', 'Backup account for period of last month' do |arg|
         options[:makeadmin_account] = arg[0]
         options[:makeadmin_domain] = arg[0]
@@ -71,6 +74,15 @@ module Zmcli
         puts "Backing up account #{a}"
         system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{BAFDAfterString} > #{a}.tar.gz")
       end
+    end
+
+    if options[:imqfa]
+      CutString = 'cut -d " " -f3'
+      stdin, stdout, stderr = Open3.popen3("zmprov gqu $(zmhostname) | grep -w #{options[:imqfa]} | #{CutString} | head -n 1")
+      current_mail_quota = stdout.read
+      new_mail_quota = current_mail_quota.to_i + 100000000
+      puts "Increasing mail quota for account #{options[:imqfa]}"
+      system("/opt/zimbra/bin/zmprov ma #{options[:imqfa]} zimbraMailQuota #{new_mail_quota.to_i}")
     end
 
     if options[:makeadmin_account] && options[:makeadmin_domain]
