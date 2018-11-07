@@ -27,3 +27,9 @@ zmcli.rb --backup-account=email@domain.tld
 ````
 zmcli.rb --backup-last-month-account=email@domain.tld
 ````
+
+**Backup all accounts for a domain**
+
+````
+zmcli.rb --backup-accounts-for-domain=domain.tld
+````
