@@ -16,6 +16,10 @@ module Zmcli
       opt.on '--backup-last-month-account ACCOUNT', 'Backup account for period of last month' do |arg|
         options[:blma] = arg
       end
+      opt.on '--make-admin ACCOUNT, DOMAIN', 'Backup account for period of last month' do |arg|
+        options[:makeadmin_account] = arg[0]
+        options[:makeadmin_domain] = arg[0]
+      end
     end
 
     opt_parser.parse!
@@ -43,6 +47,34 @@ module Zmcli
       puts "Backing up #{options[:blma]}"
       AfterString = '"' + "//?fmt=tgz&query=after:#{LastMonth}" + '"'
       system("/opt/zimbra/bin/zmmailbox -z -m #{options[:blma]} getRestURL #{AfterString} > #{options[:blma]}.tar.gz")
+    end
+
+    if options[:makeadmin_account] && options[:makeadmin_domain]
+      system("zmprov ma #{options[:makeadmin_account]} zimbraIsDelegatedAdminAccount TRUE")
+      system("zmprov ma #{options[:makeadmin_account]} zimbraAdminConsoleUIComponents cartBlancheUI zimbraAdminConsoleUIComponents domainListView zimbraAdminConsoleUIComponents accountListView zimbraAdminConsoleUIComponents DLListView")
+      system("zmprov ma #{options[:makeadmin_account]} zimbraDomainAdminMaxMailQuota 0")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} +createAccount")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} +createAlias")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} +createCalendarResource")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} +createDistributionList")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} +deleteAlias")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} +listDomain")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} +domainAdminRights")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} +configureQuota")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} set.account.zimbraAccountStatus")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} set.account.sn")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} set.account.displayName")
+      system("zmprov grantRight domain #{options[:makeadmin_domain]} usr #{options[:makeadmin_account]} set.account.zimbraPasswordMustChange")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +deleteAccount")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +getAccountInfo")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +getAccountMembership")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +getMailboxInfo")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +listAccount")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +removeAccountAlias")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +renameAccount")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +setAccountPassword")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +viewAccountAdminUI")
+      system("zmprov grantRight account #{options[:makeadmin_account]} usr #{options[:makeadmin_account]} +configureQuota")
     end
 
   end
