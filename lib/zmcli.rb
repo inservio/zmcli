@@ -57,8 +57,8 @@ module Zmcli
 
     if options[:backup_account]
       puts "Backing up #{options[:backup_account]}"
-      AfterString = '"' + "/?fmt=tgz" + '"'
-      system("/opt/zimbra/bin/zmmailbox -z -m #{options[:backup_account]} getRestURL #{AfterString} > #{options[:backup_account]}.tar.gz")
+      BackupAccountAfterString = '"' + "/?fmt=tgz" + '"'
+      system("/opt/zimbra/bin/zmmailbox -z -m #{options[:backup_account]} getRestURL #{BackupAccountAfterString} > #{options[:backup_account]}.tar.gz")
     end
 
     if options[:bafd]
@@ -68,8 +68,8 @@ module Zmcli
       accounts = gaa.split("\n")
       accounts.each do |a|
         puts "Backing up account #{a}"
-        AfterString = '"' + "/?fmt=tgz" + '"'
-        system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{AfterString} > #{a}.tar.gz")
+        BAFDAfterString = '"' + "/?fmt=tgz" + '"'
+        system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{BAFDAfterString} > #{a}.tar.gz")
       end
     end
 
