@@ -4,6 +4,7 @@ require 'date'
 #
 require_relative 'zmcli/admin.rb'
 require_relative 'zmcli/domain.rb'
+require_relative 'zmcli/account.rb'
 
 module Zmcli
   class Main
@@ -40,7 +41,7 @@ module Zmcli
 
     if options[:reindex] == "all"
       accounts = []
-      accounts = get_list_of_all_accounts
+      accounts = Account.new().get_list_of_all_accounts
       accounts.each do |a|
         reindex_account(a)
       end
@@ -104,14 +105,6 @@ module Zmcli
     def self.backup_account_to_current_directory(account)
       after_string = '"' + "/?fmt=tgz" + '"'
       system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{after_string} > #{a}.tar.gz")
-    end
-
-    def self.get_list_of_all_accounts
-      accounts = []
-      stdin, stdout, stderr = Open3.popen3("/opt/zimbra/bin/zmprov -l gaa")
-      gada = stdout.read
-      accounts = gada.split("\n")
-      return accounts
     end
 
     if options[:imqfada_domain]
