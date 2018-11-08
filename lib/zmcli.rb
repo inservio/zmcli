@@ -22,8 +22,11 @@ module Zmcli
       opt.on '--backup-accounts-for-domain DOMAIN', 'Backup account for period of last month' do |arg|
         options[:bafd] = arg
       end
-      opt.on '--increase-mail-quota-for-account Account', 'Increase mail quota for account' do |arg|
+      opt.on '--increase-mail-quota-for-account ACCOUNT', 'Increase mail quota for account' do |arg|
         options[:imqfa] = arg
+      end
+      opt.on '--increase-mail-quota-for-all-domain-accounts DOMAIN', 'Increase mail quota for all accounts under a domain.' do |arg|
+        options[:imqfada] = arg
       end
       opt.on '--make-admin ACCOUNT, DOMAIN', 'Backup account for period of last month' do |arg|
         options[:makeadmin_account] = arg[0]
@@ -87,6 +90,25 @@ module Zmcli
       system("/opt/zimbra/bin/zmprov ma #{options[:imqfa]} zimbraMailQuota #{new_mail_quota.to_i}")
       puts "New mail quota is:"
       system("zmprov ga #{options[:imqfa]} zimbraMailQuota")
+    end
+
+    if options[:imqfada]
+      accounts = []
+      gada_cut_string = 'cut -d " " -f3'
+      gada_stdin, gada_stdout, gada_stderr = Open3.popen3("/opt/zimbra/bin/zmprov -l gaa #{options[:imqfada]}")
+      gada = gada_stdout.read
+      accounts = gada.split("\n")
+      accounts.each do |a|
+        stdin, stdout, stderr = Open3.popen3("zmprov gqu $(zmhostname) | grep -w #{a} | #{gada_cut_string} | head -n 1")
+        current_mail_quota = stdout.read
+        new_mail_quota = current_mail_quota.to_i + 100000000
+        puts "Increasing mail quota for account #{a}"
+        puts "Current mail quota is:"
+        system("zmprov ga #{a} zimbraMailQuota")
+        system("/opt/zimbra/bin/zmprov ma #{a} zimbraMailQuota #{new_mail_quota.to_i}")
+        puts "New mail quota is:"
+        system("zmprov ga #{a} zimbraMailQuota")
+      end
     end
 
     if options[:makeadmin_account] && options[:makeadmin_domain]

@@ -33,3 +33,13 @@ zmcli.rb --backup-last-month-account=email@domain.tld
 ````
 zmcli.rb --backup-accounts-for-domain=domain.tld
 ````
+
+## Increase Mail Quota
+
+````
+--increase-mail-quota-for-account=email@domain.tld
+````
+
+````
+--increase-mail-quota-for-all-domain-accounts=domain.tld
+````
