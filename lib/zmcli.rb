@@ -1,6 +1,9 @@
 require 'optparse'
 require 'open3'
 require 'date'
+#
+require_relative 'zmcli/admin.rb'
+require_relative 'zmcli/domain.rb'
 
 module Zmcli
   class Main
@@ -120,7 +123,8 @@ module Zmcli
     if options[:imqfada_domain]
       accounts = []
       gada_cut_string = 'cut -d " " -f3'
-      accounts = get_list_of_accounts_for_domain(options[:imqfada_domain])
+      accounts = Domain.new(options[:imqfada_domain]).get_list_of_accounts_for_domain
+      #accounts = get_list_of_accounts_for_domain(options[:imqfada_domain])
       accounts.each do |a|
         stdin, stdout, stderr = Open3.popen3("zmprov gqu $(zmhostname) | grep -w #{a} | #{gada_cut_string} | head -n 1")
         current_mail_quota = stdout.read
@@ -135,7 +139,7 @@ module Zmcli
     end
 
     if options[:makeadmin_account] && options[:makeadmin_domain]
-      Zmcli::MakeAdmin.new(options[:makeadmin_account],options[:makeadmin_domain])
+      MakeAdmin.new(options[:makeadmin_account],options[:makeadmin_domain])
     end
 
   end

@@ -1,6 +1,6 @@
 module Zmcli
   class MakeAdmin
-    def initialize(account,email)
+    def initialize(account,domain)
       @account = account
       @domain = domain
     end
