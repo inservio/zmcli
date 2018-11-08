@@ -6,7 +6,7 @@ require "zmcli/version"
 Gem::Specification.new do |spec|
   spec.name          = "zmcli"
   spec.version       = Zmcli::VERSION
-  spec.authors       = ["N H"]
+  spec.authors       = ["Nedim Hadzimahmutovic"]
   spec.email         = ["h.nedim@gmail.com"]
 
   spec.summary       = %q{Zimbra cli.}
