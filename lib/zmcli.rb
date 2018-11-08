@@ -5,6 +5,7 @@ require 'date'
 require_relative 'zmcli/admin.rb'
 require_relative 'zmcli/domain.rb'
 require_relative 'zmcli/account.rb'
+require_relative 'zmcli/quota.rb'
 
 module Zmcli
   class Main
@@ -57,6 +58,11 @@ module Zmcli
       puts "Finished Reindexing of #{account}"
     end
 
+    def self.backup_account_to_current_directory(account)
+      after_string = '"' + "/?fmt=tgz" + '"'
+      system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{after_string} > #{a}.tar.gz")
+    end
+
     if options[:blma]
       last_month = Time.now.to_date.prev_month.strftime '%m/%d/%Y'
       puts "Backing up #{options[:blma]}"
@@ -81,30 +87,14 @@ module Zmcli
     end
 
     if options[:imqfa]
-      current_mail_quota = get_quota_usage_for_account(options[:imqfa])
+      current_mail_quota = Quota.new(options[:imqfa]).get_quota_usage_for_account
       new_mail_quota = current_mail_quota.to_i + 943718400
       puts "Current mail quota is:"
-      get_current_mail_quota(options[:imqfa])
+      Quota.new(options[:imqfa]).get_current_mail_quota
       puts "Increasing mail quota for account #{options[:imqfa]}"
       system("/opt/zimbra/bin/zmprov ma #{options[:imqfa]} zimbraMailQuota #{new_mail_quota.to_i}")
       puts "New mail quota is:"
-      get_current_mail_quota(options[:imqfa])
-    end
-
-    def self.get_quota_usage_for_account(account)
-      cut_string = 'cut -d " " -f3'
-      stdin, stdout, stderr = Open3.popen3("zmprov gqu $(zmhostname) | grep -w #{account} | #{cut_string} | head -n 1")
-      current_mail_quota = stdout.read
-      return current_mail_quota
-    end
-
-    def self.get_current_mail_quota(account)
-      system("zmprov ga #{account} zimbraMailQuota")
-    end
-
-    def self.backup_account_to_current_directory(account)
-      after_string = '"' + "/?fmt=tgz" + '"'
-      system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{after_string} > #{a}.tar.gz")
+      Quota.new(options[:imqfa]).get_current_mail_quota
     end
 
     if options[:imqfada_domain]
@@ -117,10 +107,10 @@ module Zmcli
         new_mail_quota = current_mail_quota.to_i + 943718400
         puts "Increasing mail quota for account #{a}"
         puts "Current mail quota is:"
-        get_current_mail_quota(a)
+        Quota.new(a).get_current_mail_quota
         system("/opt/zimbra/bin/zmprov ma #{a} zimbraMailQuota #{new_mail_quota.to_i}")
         puts "New mail quota is:"
-        get_current_mail_quota(a)
+        Quota.new(a).get_current_mail_quota
       end
     end
 
