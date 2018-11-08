@@ -83,7 +83,7 @@ module Zmcli
       CutString = 'cut -d " " -f3'
       stdin, stdout, stderr = Open3.popen3("zmprov gqu $(zmhostname) | grep -w #{options[:imqfa]} | #{CutString} | head -n 1")
       current_mail_quota = stdout.read
-      new_mail_quota = current_mail_quota.to_i + 100000000
+      new_mail_quota = current_mail_quota.to_i + 943718400
       puts "Increasing mail quota for account #{options[:imqfa]}"
       puts "Current mail quota is:"
       system("zmprov ga #{options[:imqfa]} zimbraMailQuota")
@@ -101,7 +101,7 @@ module Zmcli
       accounts.each do |a|
         stdin, stdout, stderr = Open3.popen3("zmprov gqu $(zmhostname) | grep -w #{a} | #{gada_cut_string} | head -n 1")
         current_mail_quota = stdout.read
-        new_mail_quota = current_mail_quota.to_i + 100000000
+        new_mail_quota = current_mail_quota.to_i + 943718400
         puts "Increasing mail quota for account #{a}"
         puts "Current mail quota is:"
         system("zmprov ga #{a} zimbraMailQuota")
