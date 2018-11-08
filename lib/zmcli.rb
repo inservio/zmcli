@@ -105,13 +105,7 @@ module Zmcli
       after_string = '"' + "/?fmt=tgz" + '"'
       system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{after_string} > #{a}.tar.gz")
     end
-    def self.get_list_of_accounts_for_domain(domain)
-      accounts = []
-      stdin, stdout, stderr = Open3.popen3("/opt/zimbra/bin/zmprov -l gaa", domain)
-      gada = stdout.read
-      accounts = gada.split("\n")
-      return accounts
-    end
+
     def self.get_list_of_all_accounts
       accounts = []
       stdin, stdout, stderr = Open3.popen3("/opt/zimbra/bin/zmprov -l gaa")
@@ -124,7 +118,6 @@ module Zmcli
       accounts = []
       gada_cut_string = 'cut -d " " -f3'
       accounts = Domain.new(options[:imqfada_domain]).get_list_of_accounts_for_domain
-      #accounts = get_list_of_accounts_for_domain(options[:imqfada_domain])
       accounts.each do |a|
         stdin, stdout, stderr = Open3.popen3("zmprov gqu $(zmhostname) | grep -w #{a} | #{gada_cut_string} | head -n 1")
         current_mail_quota = stdout.read
