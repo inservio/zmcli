@@ -1,8 +1,11 @@
 # Zmcli
 
-Usage examples.
+Zimbra CLI automation tool.
 
-## Reindex
+
+## Usage examples.
+
+### Reindex
 
 **Reindex all accounts**
 ````
@@ -14,7 +17,7 @@ zmcli.rb --reindex=all
 zmcli.rb --reindex=email@domain.tld
 ````
 
-## Backup
+### Backup
 
 **Backup a single account**
 
@@ -34,12 +37,12 @@ zmcli.rb --backup-last-month-account=email@domain.tld
 zmcli.rb --backup-accounts-for-domain=domain.tld
 ````
 
-## Increase Mail Quota
+### Increase Mail Quota
 
 ````
---increase-mail-quota-for-account=email@domain.tld
+zmcli.rb --increase-mail-quota-for-account=email@domain.tld
 ````
 
 ````
---increase-mail-quota-for-all-domain-accounts=domain.tld
+zmcli.rb --increase-mail-quota-for-all-domain-accounts=domain.tld
 ````
