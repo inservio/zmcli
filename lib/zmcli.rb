@@ -40,6 +40,7 @@ module Zmcli
 
     opt_parser.parse!
 
+    # Reindex All Acounts
     if options[:reindex] == "all"
       accounts = []
       accounts = Account.new().get_list_of_all_accounts
@@ -47,19 +48,23 @@ module Zmcli
         Account.new(a).reindex_account
       end
     else
+      # Reindex a single account
       if options[:reindex]
         Account.new(options[:reindex]).reindex_account
       end
     end
 
+    # Backup Last Month Account
     if options[:blma]
       Account.new(options[:blma]).backup_account_last_month_to_current_directory
     end
 
+    # Backup Complete Account
     if options[:backup_account]
       Account.new(options[:backup_account]).backup_account_to_current_directory
     end
 
+    # Backup Accounts For Domain
     if options[:bafd]
       accounts = []
       accounts = Domain.new(options[:bafd]).get_list_of_accounts_for_domain
@@ -68,6 +73,7 @@ module Zmcli
       end
     end
 
+    # Increase Mail Quota For Account
     if options[:imqfa]
       current_mail_quota = Quota.new(options[:imqfa]).get_quota_usage_for_account
       new_mail_quota = current_mail_quota.to_i + 943718400
@@ -78,6 +84,7 @@ module Zmcli
       Quota.new(options[:imqfa]).get_current_mail_quota
     end
 
+    # Increase Mail Quota For All Domain Accounts
     if options[:imqfada_domain]
       accounts = []
       accounts = Domain.new(options[:imqfada_domain]).get_list_of_accounts_for_domain
