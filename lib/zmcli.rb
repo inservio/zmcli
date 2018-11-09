@@ -80,16 +80,14 @@ module Zmcli
 
     if options[:imqfada_domain]
       accounts = []
-      gada_cut_string = 'cut -d " " -f3'
       accounts = Domain.new(options[:imqfada_domain]).get_list_of_accounts_for_domain
       accounts.each do |a|
-        stdin, stdout, stderr = Open3.popen3("zmprov gqu $(zmhostname) | grep -w #{a} | #{gada_cut_string} | head -n 1")
-        current_mail_quota = stdout.read
+        Quota.new(a).get_current_mail_quota
         new_mail_quota = current_mail_quota.to_i + 943718400
         puts "Increasing mail quota for account #{a}"
         puts "Current mail quota is:"
         Quota.new(a).get_current_mail_quota
-        system("/opt/zimbra/bin/zmprov ma #{a} zimbraMailQuota #{new_mail_quota.to_i}")
+        Quota.new(a, new_mail_quota).get_current_mail_quota
         puts "New mail quota is:"
         Quota.new(a).get_current_mail_quota
       end
