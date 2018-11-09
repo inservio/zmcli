@@ -62,11 +62,8 @@ module Zmcli
 
     if options[:bafd]
       accounts = []
-      stdin, stdout, stderr = Open3.popen3("/opt/zimbra/bin/zmprov -l gaa #{options[:bafd]}")
-      gaa = stdout.read
-      accounts = gaa.split("\n")
+      accounts = Domain.new(options[:bafd]).get_list_of_accounts_for_domain
       accounts.each do |a|
-        puts "Backing up account #{a}"
         Account.new(a).backup_account_to_current_directory
       end
     end
