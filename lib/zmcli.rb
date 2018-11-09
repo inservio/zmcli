@@ -44,23 +44,12 @@ module Zmcli
       accounts = []
       accounts = Account.new().get_list_of_all_accounts
       accounts.each do |a|
-        reindex_account(a)
+        Account.new(a).reindex_account
       end
     else
       if options[:reindex]
-        reindex_account(options[:reindex])
+        Account.new(options[:reindex]).reindex_account
       end
-    end
-
-    def self.reindex_account(account)
-      puts   "Reindexing #{account}"
-      system("/opt/zimbra/bin/zmprov rim #{account} start")
-      puts "Finished Reindexing of #{account}"
-    end
-
-    def self.backup_account_to_current_directory(account)
-      after_string = '"' + "/?fmt=tgz" + '"'
-      system("/opt/zimbra/bin/zmmailbox -z -m #{a} getRestURL #{after_string} > #{a}.tar.gz")
     end
 
     if options[:blma]
@@ -72,7 +61,7 @@ module Zmcli
 
     if options[:backup_account]
       puts "Backing up #{options[:backup_account]}"
-      backup_account_to_current_directory(options[:backup_account])
+      Account.new(options[:backup_account]).backup_account_to_current_directory
     end
 
     if options[:bafd]
@@ -82,7 +71,7 @@ module Zmcli
       accounts = gaa.split("\n")
       accounts.each do |a|
         puts "Backing up account #{a}"
-        backup_account_to_current_directory(a)
+        Account.new(a).backup_account_to_current_directory
       end
     end
 
