@@ -53,14 +53,10 @@ module Zmcli
     end
 
     if options[:blma]
-      last_month = Time.now.to_date.prev_month.strftime '%m/%d/%Y'
-      puts "Backing up #{options[:blma]}"
-      after_string = '"' + "//?fmt=tgz&query=after:#{last_month}" + '"'
-      system("/opt/zimbra/bin/zmmailbox -z -m #{options[:blma]} getRestURL #{after_string} > #{options[:blma]}.tar.gz")
+      Account.new(options[:blma]).backup_account_last_month_to_current_directory
     end
 
     if options[:backup_account]
-      puts "Backing up #{options[:backup_account]}"
       Account.new(options[:backup_account]).backup_account_to_current_directory
     end
 
