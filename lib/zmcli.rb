@@ -73,8 +73,7 @@ module Zmcli
       new_mail_quota = current_mail_quota.to_i + 943718400
       puts "Current mail quota is:"
       Quota.new(options[:imqfa]).get_current_mail_quota
-      puts "Increasing mail quota for account #{options[:imqfa]}"
-      system("/opt/zimbra/bin/zmprov ma #{options[:imqfa]} zimbraMailQuota #{new_mail_quota.to_i}")
+      Quota.new(options[:imqfa], new_mail_quota).get_current_mail_quota
       puts "New mail quota is:"
       Quota.new(options[:imqfa]).get_current_mail_quota
     end
