@@ -100,6 +100,7 @@ module Zmcli
       end
     end
 
+    # Grant Admin Privileges for a Domain
     if options[:makeadmin_account] && options[:makeadmin_domain]
       MakeAdmin.new(options[:makeadmin_account],options[:makeadmin_domain])
     end
