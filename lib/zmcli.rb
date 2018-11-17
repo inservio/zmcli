@@ -58,12 +58,14 @@ module Zmcli
 
     # Backup Last Month Account
     if options[:blma]
-      Account.new(options[:blma]).backup_account_last_month_to_current_directory
+      account = Account.new(options[:blma])
+      account.backup_account_last_month_to_current_directory
     end
 
     # Backup Complete Account
     if options[:backup_account]
-      Account.new(options[:backup_account]).backup_account_to_current_directory
+      account = Account.new(options[:backup_account])
+      account.backup_account_to_current_directory
     end
 
     # Backup Accounts For Domain
