@@ -56,10 +56,19 @@ module Zmcli
       end
     end
 
-    # Backup Last Month Account
-    if options[:blma]
-      account = Account.new(options[:blma])
-      account.backup_last_month_to_current_directory
+    # Backup Last Month for all Accounts
+    if options[:blma] == "all"
+      accounts = []
+      accounts = Account.new().list_all
+      accounts.each do |a|
+        account = Account.new(a)
+        account.backup_last_month_to_current_directory
+      end
+    else
+      if options[:blma]
+        account = Account.new(options[:blma])
+        account.backup_last_month_to_current_directory
+      end
     end
 
     # Backup Complete Account
