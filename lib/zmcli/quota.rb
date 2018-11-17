@@ -1,3 +1,5 @@
+require_relative 'defaults.rb'
+
 module Zmcli
   class Quota
     def initialize(account = nil, quota = 0)
@@ -10,11 +12,11 @@ module Zmcli
       stdout
     end
     def get_current_mail_quota
-      system("zmprov ga #{@account} zimbraMailQuota")
+      system("#{ZMPATH}zmprov", 'ga', @account, 'zimbraMailQuota')
     end
     def set_mail_quota
       puts "Increasing mail quota for account #{@account}"
-      system("/opt/zimbra/bin/zmprov ma #{@account} zimbraMailQuota #{@quota.to_i}")
+      system("#{ZMPATH}zmprov", 'ma', @account, 'zimbraMailQuota', @quota.to_i)
     end
   end
 end
