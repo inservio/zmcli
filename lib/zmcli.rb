@@ -20,11 +20,14 @@ module Zmcli
       opt.on '--backup-last-month-account ACCOUNT', 'Backup account for period of last month' do |arg|
         options[:blma] = arg
       end
-      opt.on '--backup-account ACCOUNT', 'Backup account for period of last month' do |arg|
+      opt.on '--backup ACCOUNT', 'Backup account.' do |arg|
         options[:backup_account] = arg
       end
       opt.on '--backup-accounts-for-domain DOMAIN', 'Backup account for period of last month' do |arg|
         options[:bafd] = arg
+      end
+      opt.on '--restore ACCOUNT', 'Restore account.' do |arg|
+        options[:restore_account] = arg
       end
       opt.on '--increase-mail-quota-for-account ACCOUNT', 'Increase mail quota for account' do |arg|
         options[:imqfa] = arg
@@ -34,7 +37,7 @@ module Zmcli
       end
       opt.on '--make-admin ACCOUNT, DOMAIN', 'Backup account for period of last month' do |arg|
         options[:makeadmin_account] = arg[0]
-        options[:makeadmin_domain] = arg[0]
+        options[:makeadmin_domain] = arg[1]
       end
     end
 
@@ -62,30 +65,36 @@ module Zmcli
       accounts = Account.new().list_all
       accounts.each do |a|
         account = Account.new(a)
-        account.backup_last_month_to_current_directory
+        account.backup_last_month
       end
     else
       if options[:blma]
         account = Account.new(options[:blma])
-        account.backup_last_month_to_current_directory
+        account.backup_last_month
       end
     end
 
     # Backup Complete Account
     if options[:backup_account]
       account = Account.new(options[:backup_account])
-      account.backup_to_current_directory
+      account.backup
     end
 
     # Backup Accounts For Domain
     if options[:bafd]
       accounts = []
       domain = Domain.new(options[:bafd])
-      accounts = domain.get_list_of_accounts
+      accounts = domain.list_all_accounts
       accounts.each do |a|
         account = Account.new(a)
-        account.backup_to_current_directory
+        account.backup
       end
+    end
+
+    # Restore Complete Account
+    if options[:restore_account]
+      account = Account.new(options[:restore_account])
+      account.restore
     end
 
     # Increase Mail Quota For Account
@@ -103,7 +112,7 @@ module Zmcli
     if options[:imqfada_domain]
       accounts = []
       domain = Domain.new(options[:imqfada_domain])
-      accounts = domain.get_list_of_accounts
+      accounts = domain.list_all_accounts
       accounts.each do |a|
         account = Quota.new(a)
         account.get_current_mail_quota

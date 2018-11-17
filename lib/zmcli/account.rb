@@ -12,12 +12,17 @@ module Zmcli
       system("/opt/zimbra/bin/zmprov rim #{@account} start")
       puts "Finished Reindexing of #{@account}"
     end
-    def backup_to_current_directory
+    def backup
       puts "Backing up #{@account}"
       after_string = '"' + "/?fmt=tgz" + '"'
       system("/opt/zimbra/bin/zmmailbox -z -m #{@account} getRestURL #{after_string} > #{@account}.tar.gz")
     end
-    def backup_last_month_to_current_directory
+    def restore
+      puts "Restoring #{@account}"
+      after_string = '"' + "/?fmt=tgz&resolve=skip" + '"'
+      system("/opt/zimbra/bin/zmmailbox -z -m #{@account} postRestURL #{after_string} #{@account}.tar.gz")
+    end
+    def backup_last_month
       last_month = Time.now.to_date.prev_month.strftime '%m/%d/%Y'
       after_string = '"' + "//?fmt=tgz&query=after:#{last_month}" + '"'
       puts "Backing up last month of #{@account}"
