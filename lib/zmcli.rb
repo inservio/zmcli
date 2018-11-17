@@ -43,14 +43,16 @@ module Zmcli
     # Reindex All Acounts
     if options[:reindex] == "all"
       accounts = []
-      accounts = Account.new().get_list_of_all_accounts
+      accounts = Account.new().list_all
       accounts.each do |a|
-        Account.new(a).reindex_account
+        account = Account.new(a)
+        account.reindex
       end
     else
       # Reindex a single account
       if options[:reindex]
-        Account.new(options[:reindex]).reindex_account
+        account = Account.new(options[:reindex])
+        account.reindex
       end
     end
 
@@ -69,7 +71,8 @@ module Zmcli
       accounts = []
       accounts = Domain.new(options[:bafd]).get_list_of_accounts_for_domain
       accounts.each do |a|
-        Account.new(a).backup_account_to_current_directory
+        account = Account.new(a)
+        account.backup_account_to_current_directory
       end
     end
 
@@ -89,14 +92,15 @@ module Zmcli
       accounts = []
       accounts = Domain.new(options[:imqfada_domain]).get_list_of_accounts_for_domain
       accounts.each do |a|
-        Quota.new(a).get_current_mail_quota
+        account = Quota.new(a)
+        account.get_current_mail_quota
         new_mail_quota = current_mail_quota.to_i + 943718400
         puts "Increasing mail quota for account #{a}"
         puts "Current mail quota is:"
-        Quota.new(a).get_current_mail_quota
+        account.get_current_mail_quota
         Quota.new(a, new_mail_quota).get_current_mail_quota
         puts "New mail quota is:"
-        Quota.new(a).get_current_mail_quota
+        account.get_current_mail_quota
       end
     end
 

@@ -3,11 +3,11 @@ module Zmcli
     def initialize(account = nil)
       @account = account
     end
-    def get_list_of_all_accounts
+    def list_all
       stout, status = Open3.capture2("/opt/zimbra/bin/zmprov -l gaa")
       stdout.read.split("\n")
     end
-    def reindex_account
+    def reindex
       puts   "Reindexing #{@account}"
       system("/opt/zimbra/bin/zmprov rim #{@account} start")
       puts "Finished Reindexing of #{@account}"
