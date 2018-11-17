@@ -4,7 +4,7 @@ module Zmcli
       @account = account
     end
     def list_all
-      stout, status = Open3.capture2("/opt/zimbra/bin/zmprov -l gaa")
+      stdout, status = Open3.capture2("/opt/zimbra/bin/zmprov -l gaa")
       stdout.read.split("\n")
     end
     def reindex
