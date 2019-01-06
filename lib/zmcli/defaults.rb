@@ -1,3 +1,3 @@
 module Zmcli
-  ZMTPATH = '/opt/zimbra/bin/'
+  ZMPATH = '/opt/zimbra/bin/'
 end
