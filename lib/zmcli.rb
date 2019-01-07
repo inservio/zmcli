@@ -1,4 +1,3 @@
-require 'optparse'
 require 'open3'
 require 'date'
 #

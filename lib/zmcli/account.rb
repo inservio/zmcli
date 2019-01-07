@@ -7,12 +7,12 @@ module Zmcli
     end
     def list_all
       stdout, status = Open3.capture2("#{ZMPATH}zmprov", '-l', 'gaa')
-      stdout.read.split("\n")
+      stdout.split("\n")
     end
     def reindex
       puts   "Reindexing #{@account}"
       system("#{ZMPATH}zmprov", 'rim', @account, 'start')
-      puts "Finished Reindexing of #{@account}"
+      puts "Reindexing of #{@account} is finished"
     end
     def backup
       puts "Backing up #{@account}"
