@@ -37,7 +37,7 @@ module Zmcli
       else
         # Reindex a single account
         if options[:account]
-          account = Account.new(options[:reindex])
+          account = Account.new(options[:account])
           account.reindex
         end
       end
@@ -75,8 +75,8 @@ module Zmcli
       end
     when "--restore"
       # Restore Complete Account
-      if options[:restore_account]
-        account = Account.new(options[:restore_account])
+      if options[:account]
+        account = Account.new(options[:account])
         account.restore
       end
     when "--increase-mail-quota"
