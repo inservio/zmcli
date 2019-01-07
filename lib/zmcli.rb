@@ -62,11 +62,11 @@ module Zmcli
         account = Account.new(options[:account])
         account.backup
       end
-    when "backup-accounts-for-domain"
+    when "backup-accounts"
       # Backup Accounts For Domain
-      if options[:bafd]
+      if options[:domain]
         accounts = []
-        domain = Domain.new(options[:bafd])
+        domain = Domain.new(options[:domain])
         accounts = domain.list_all_accounts
         accounts.each do |a|
           account = Account.new(a)
@@ -90,6 +90,7 @@ module Zmcli
         puts "New mail quota is:"
         Quota.new(options[:account]).get_current_mail_quota
       end
+    when "increase-mail-quota-accounts"
       # Increase Mail Quota For All Domain Accounts
       if options[:domain]
         accounts = []
