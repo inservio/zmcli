@@ -24,8 +24,12 @@ module Zmcli
     end
     def backup_last_month
       last_month = Time.now.to_date.prev_month.strftime '%m/%d/%Y'
-      puts "Backing up last month of #{@account}"
-      system("#{ZMPATH}zmmailbox", '-z', '-m', @account, 'getRestURL', '-o', "#{@account}.tar.gz", "//?fmt=tgz&query=after:#{last_month}")
+      puts "Starting last month backup of #{@account}."
+      if system("#{ZMPATH}zmmailbox", '-z', '-m', @account, 'getRestURL', '-o', "#{@account}.tar.gz", "//?fmt=tgz&query=after:#{last_month}")
+        puts "Backing up last month of #{@account} was successful."
+      else
+        puts "Backing up last month of #{@account} failed."
+      end
     end
   end
 end
