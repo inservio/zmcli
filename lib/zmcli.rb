@@ -72,13 +72,13 @@ module Zmcli
           account.backup
         end
       end
-    when "--restore"
+    when "restore"
       # Restore Complete Account
       if options[:account]
         account = Account.new(options[:account])
         account.restore
       end
-    when "--increase-mail-quota"
+    when "increase-mail-quota"
       # Increase Mail Quota For Account
       if options[:account]
         current_mail_quota = Quota.new(options[:account]).get_quota_usage_for_account
