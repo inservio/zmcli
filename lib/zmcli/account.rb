@@ -36,7 +36,7 @@ module Zmcli
     end
     def backup_after
       time = @time.strftime '%m/%d/%Y'
-      puts "Starting last month backup of #{@account}."
+      puts "Starting backup of #{@account} after #{@time}."
       if system("#{ZMPATH}zmmailbox", '-z', '-m', @account, 'getRestURL', '-o', "#{@account}.tar.gz", "//?fmt=tgz&query=after:#{time}")
         puts "Backup after #{time} of #{@account} was successful."
       else
