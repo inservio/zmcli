@@ -19,6 +19,12 @@ zmcli.rb reindex --account==email@domain.tld
 
 ### Backup
 
+**Backup all accounts**
+
+````
+zmcli.rb backup --account=all
+````
+
 **Backup a single account**
 
 ````
