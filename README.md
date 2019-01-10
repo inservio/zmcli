@@ -25,10 +25,14 @@ zmcli.rb reindex --account==email@domain.tld
 zmcli.rb backup --account=email@domain.tld
 ````
 
-**Backup a single account for period of last month**
+**Backup a single account for specific period**
 
 ````
-zmcli.rb backup-last-month --account=email@domain.tld
+zmcli.rb backup-last --time=month --account=email@domain.tld
+````
+
+````
+zmcli.rb backup-last --time=year --account=email@domain.tld
 ````
 
 **Backup all accounts for a domain**
