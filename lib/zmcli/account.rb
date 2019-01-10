@@ -2,8 +2,9 @@ require_relative 'defaults.rb'
 
 module Zmcli
   class Account
-    def initialize(account = nil)
+    def initialize(account = nil, time = nil)
       @account = account
+      @time = time
     end
     def list_all
       stdout, status = Open3.capture2("#{ZMPATH}zmprov", '-l', 'gaa')
@@ -33,10 +34,10 @@ module Zmcli
         puts "Restore of #{@account} failed."
       end
     end
-    def backup_last_month
-      last_month = Time.now.to_date.prev_month.strftime '%m/%d/%Y'
+    def backup_after
+      time = @time.strftime '%m/%d/%Y'
       puts "Starting last month backup of #{@account}."
-      if system("#{ZMPATH}zmmailbox", '-z', '-m', @account, 'getRestURL', '-o', "#{@account}.tar.gz", "//?fmt=tgz&query=after:#{last_month}")
+      if system("#{ZMPATH}zmmailbox", '-z', '-m', @account, 'getRestURL', '-o', "#{@account}.tar.gz", "//?fmt=tgz&query=after:#{time}")
         puts "Backing up last month of #{@account} was successful."
       else
         puts "Backing up last month of #{@account} failed."

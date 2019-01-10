@@ -20,6 +20,13 @@ module Zmcli
         options[:domain]=value
       when "--account", "-a"
         options[:account]=value
+      when "--time", "-t"
+        case value
+        when "month"
+          options[:time]=Date.today-31
+        when "year"
+          options[:time]=Date.today-365
+        end
       end
     end
 
@@ -40,29 +47,39 @@ module Zmcli
           account.reindex
         end
       end
-    when "backup-last-month"
+    when "backup-last"
       # Backup Last Month for all Accounts
       if options[:account] == "all"
         accounts = []
         accounts = Account.new().list_all
         accounts.each do |a|
           account = Account.new(a)
-          account.backup_last_month
+          account.backup_after(options[:time])
         end
       else
         if options[:account]
-          account = Account.new(options[:account])
-          account.backup_last_month
+          account = Account.new(options[:account],options[:time])
+          account.backup_after
         end
       end
     when "backup"
-      # Backup Complete Account
-      if options[:account]
-        account = Account.new(options[:account])
-        account.backup
+      # Comeplete Backup of all Accounts
+      if options[:account] == "all"
+        accounts = []
+        accounts = Account.new().list_all
+        accounts.each do |a|
+          account = Account.new(a)
+          account.backup
+        end
+      else
+        # Complete Backup of an Account
+        if options[:account]
+          account = Account.new(options[:account])
+          account.backup
+        end
       end
     when "backup-accounts"
-      # Backup Accounts For Domain
+      # Backup all Accounts for a Domain
       if options[:domain]
         accounts = []
         domain = Domain.new(options[:domain])
