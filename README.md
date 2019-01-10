@@ -8,13 +8,19 @@ Zimbra CLI automation tool.
 ### Reindex
 
 **Reindex all accounts**
+
 ````
 zmcli.rb reindex --account=all
 ````
+
+````
+zmcli.rb reindex -a=all
+````
+
 **Reindex a single account**
 
 ````
-zmcli.rb reindex --account==email@domain.tld
+zmcli.rb reindex --account=email@domain.tld
 ````
 
 ### Backup
